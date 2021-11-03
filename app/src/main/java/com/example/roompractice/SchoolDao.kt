@@ -28,6 +28,6 @@ interface SchoolDao {
 
     @Transaction
     @Query("SELECT * FROM school WHERE schoolName = :schoolName")
-    suspend fun getSchoolWithStudents(val schoolName: String) : List<SchoolWithStudents>
+    suspend fun getSchoolWithStudents(schoolName: String) : List<SchoolWithStudents>
 
 }
