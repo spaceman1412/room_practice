@@ -1,15 +1,13 @@
 package com.example.roompractice
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.example.roompractice.entities.Director
 import com.example.roompractice.entities.School
 import com.example.roompractice.entities.Student
-import com.example.roompractice.entities.relation.SchoolAndDirector
-import com.example.roompractice.entities.relation.SchoolWithStudents
+import com.example.roompractice.entities.Subject
+import com.example.roompractice.entities.relation.*
 
+@Dao
 interface SchoolDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -21,6 +19,12 @@ interface SchoolDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStudent(student: Student)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSubject(subject: Subject)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertStudentSubjectCrossRef(crossRef: StudentSubjectCrossRef)
+
     @Transaction
     @Query("SELECT * FROM school WHERE schoolName = :schoolName")
     suspend fun getSchoolAndDirectorWithSchoolName(schoolName: String) : List<SchoolAndDirector>
@@ -29,5 +33,15 @@ interface SchoolDao {
     @Transaction
     @Query("SELECT * FROM school WHERE schoolName = :schoolName")
     suspend fun getSchoolWithStudents(schoolName: String) : List<SchoolWithStudents>
+
+    @Transaction
+    @Query("SELECT * FROM subject WHERE subjectName = :subjectName")
+    suspend fun getStudentsOfSubject(subjectName: String) : List<SubjectWithStudents>
+
+    @Transaction
+    @Query("SELECT * FROM student WHERE studentName = :studentName")
+    suspend fun getSubjectsOfStudent(studentName: String) : List<StudentWithSubjects>
+
+
 
 }
